@@ -51,10 +51,10 @@ def get_video_list(channel_id: str, playlist_id: str):
     is_success = request(addr, port, "POST", entry, get_video_list_req, get_video_list_rsp).start()
     if not is_success:
         logger.error(f"get_video_list fail ! channel_id = {channel_id} playlist_id = {playlist_id}")
-        return
+        return None
     if get_video_list_rsp.result != 0:
         logger.error(f"get_video_list channel_id = {channel_id} result = {get_video_list_rsp.result } !")
-        return
+        return None
     return {
         "videos": get_video_list_rsp.videos,
         "nextPageToken": get_video_list_rsp.nextPageToken,

@@ -18,7 +18,8 @@ async def youtube_channel_video_update(**kwargs):
         # 没数据先拉一遍
         channel_info = get_channel_info(channel_id)
         if channel_info is None:
-            logger.error(f"youtube_channel_video_update cannot get_channel_info ! channel_id = {channel_id}")
+            logger.warning(f"youtube_channel_video_update cannot get_channel_info fail. "
+                           f"Ignore. channel_id = {channel_id}")
             return
         all_channel_info[channel_id] = {
             "channel_info": channel_info,
@@ -29,6 +30,9 @@ async def youtube_channel_video_update(**kwargs):
         }
     playlist_id = all_channel_info[channel_id]["channel_info"]["playlist_id"]
     video_list = get_video_list(channel_id, playlist_id)
+    if video_list is None:
+        logger.warning(f"youtube_channel_video_update get_video_list fail. "
+                       f"Ignore. channel_id = {channel_id} playlist_id = {playlist_id}")
     for video in video_list["videos"]:
         # 按时间来排就行
         if all_channel_info[channel_id]["videos"]["cur_newest_video"] is None:
