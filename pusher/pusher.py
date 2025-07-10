@@ -16,7 +16,7 @@ async def youtube_channel_video_update(**kwargs):
         return
     if all_channel_info.get(channel_id) is None:
         # 没数据先拉一遍
-        channel_info = get_channel_info(channel_id)
+        channel_info = await get_channel_info(channel_id)
         if channel_info is None:
             logger.warning(f"youtube_channel_video_update cannot get_channel_info fail. "
                            f"Ignore. channel_id = {channel_id}")
@@ -29,7 +29,7 @@ async def youtube_channel_video_update(**kwargs):
             },
         }
     playlist_id = all_channel_info[channel_id]["channel_info"]["playlist_id"]
-    video_list = get_video_list(channel_id, playlist_id)
+    video_list = await get_video_list(channel_id, playlist_id)
     if video_list is None:
         logger.warning(f"youtube_channel_video_update get_video_list fail. "
                        f"Ignore. channel_id = {channel_id} playlist_id = {playlist_id}")

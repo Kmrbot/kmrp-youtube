@@ -29,7 +29,7 @@ async def _(
     msg_type = ProtocolAdapter.get_msg_type(event)
     msg_type_id = ProtocolAdapter.get_msg_type_id(event)
     # 获取一下频道名
-    channel_info = get_channel_info(channel_id)
+    channel_info = await get_channel_info(channel_id)
     if channel_info is None:
         await follow_channel.finish("获取频道信息失败！")
     if DBPluginsChannelData.is_exist(msg_type, msg_type_id, channel_id):

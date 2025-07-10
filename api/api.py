@@ -9,7 +9,7 @@ from ..youtube_config import \
 from .protocol import YoutubeMonitor_pb2
 
 
-def get_channel_info(channel_id: str):
+async def get_channel_info(channel_id: str):
     get_channel_info_req = YoutubeMonitor_pb2.WebGetChannelInfoReq()
     get_channel_info_req.serviceInfo.apiKey = get_youtube_api_key()
     # get_channel_info_req.serviceInfo.proxy = ""
@@ -20,7 +20,7 @@ def get_channel_info(channel_id: str):
     entry = get_youtube_monitor_server_get_channel_info_entry()
 
     set_marshal(MarshalType.MARSHAL_TYPE_PROTOJSON)
-    is_success = request(addr, port, "POST", entry, get_channel_info_req, get_channel_info_rsp).start()
+    is_success = await request(addr, port, "POST", entry, get_channel_info_req, get_channel_info_rsp).start_async()
     if not is_success:
         logger.error(f"get_channel_info fail ! channel_id = {channel_id}")
         return
@@ -36,7 +36,7 @@ def get_channel_info(channel_id: str):
     }
 
 
-def get_video_list(channel_id: str, playlist_id: str):
+async def get_video_list(channel_id: str, playlist_id: str):
     get_video_list_req = YoutubeMonitor_pb2.WebGetVideoListReq()
     get_video_list_req.serviceInfo.apiKey = get_youtube_api_key()
     # get_video_list_req.serviceInfo.proxy = ""
@@ -48,7 +48,7 @@ def get_video_list(channel_id: str, playlist_id: str):
     entry = get_youtube_monitor_server_get_vide_list_entry()
 
     set_marshal(MarshalType.MARSHAL_TYPE_PROTOJSON)
-    is_success = request(addr, port, "POST", entry, get_video_list_req, get_video_list_rsp).start()
+    is_success = await request(addr, port, "POST", entry, get_video_list_req, get_video_list_rsp).start_async()
     if not is_success:
         logger.error(f"get_video_list fail ! channel_id = {channel_id} playlist_id = {playlist_id}")
         return None
