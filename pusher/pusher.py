@@ -62,7 +62,7 @@ async def youtube_channel_video_push(**kwargs):
                     message=ProtocolAdapter.MS.text("Youtube频道视频更新：\n\n"
                                                     f"频道：{video.ownerChannelTitle}\n"
                                                     f"频道ID：{video.ownerChannelID}\n"
-                                                    f"视频链接：https://www.youtube.com/watch?v={video.videoID}"
+                                                    f"视频链接：https://www.youtube.com/watch?v={video.videoID}\n"
                                                     f"视频标题：{video.title}\n"
                                                     f"发布时间：{publish_time}\n"
                                                     f"视频简介：{video.description}")
