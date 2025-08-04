@@ -21,7 +21,6 @@ follow_channel.handle()(white_list_handle("youtube"))
 
 @follow_channel.handle()
 async def _(
-        matcher: Matcher,
         event: Union[AdapterGroupMessageEvent, AdapterPrivateMessageEvent],
         params: Tuple[Any, ...] = RegexGroup()
 ):
@@ -31,8 +30,8 @@ async def _(
     # 获取一下频道名
     channel_info = await get_channel_info(channel_id)
     if channel_info is None:
-        await follow_channel.finish("获取频道信息失败！")
+        await follow_channel.finish("获取Youtube频道信息失败！")
     if DBPluginsChannelData.is_exist(msg_type, msg_type_id, channel_id):
-        await follow_channel.finish("该频道已关注！")
+        await follow_channel.finish("该Youtube频道已关注！")
     DBPluginsChannelData.add_default_data(msg_type, msg_type_id, channel_id)
-    await follow_channel.finish(f"已关注频道 {channel_info['title']}（{channel_id}）")
+    await follow_channel.finish(f"已关注Youtube频道 {channel_info['title']}（{channel_id}）")

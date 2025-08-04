@@ -1,9 +1,17 @@
 import copy
 import re
+from dataclasses import dataclass
 
 from database.db_manager import DBManager
 from database.interface.db_impl_interface import DBCacheImplInterface
 from nonebot.log import logger
+
+
+@dataclass
+class Key:
+    channel_id: str
+    msg_type: str
+    msg_type_id: int
 
 
 # 群组
@@ -36,11 +44,23 @@ class DBPluginsChannelData(DBCacheImplInterface):
         cls.__add_to_push_list(msg_type, msg_type_id, channel_id, "video")
 
     @classmethod
-    def del_user_data(cls, msg_type, msg_type_id, channel_id):
+    def del_channel_data(cls, msg_type, msg_type_id, channel_id):
         """ 删除数据 """
         key = cls.generate_key(msg_type, msg_type_id, channel_id)
         cls.del_data(key)
         cls.__del_from_push_list(msg_type, msg_type_id, channel_id, "video")
+
+    @classmethod
+    def del_channel_data_by_msg_type_id(cls, msg_type, msg_type_id):
+        """ 根据msgType和msgTypeID删除数据 """
+        del_channel_ids = set()
+        for k, data in copy.deepcopy(cls.get_data()).items():
+            key_info = cls.analysis_key(k)
+            if key_info.msg_type == msg_type and key_info.msg_type_id == msg_type_id:
+                channel_id = key_info.channel_id
+                del_channel_ids.add(channel_id)
+                cls.del_channel_data(channel_id, msg_type, msg_type_id)
+        return list(del_channel_ids)
 
     @classmethod
     def set_video_notify(cls, msg_type, msg_type_id, channel_id, is_notify):
@@ -70,8 +90,8 @@ class DBPluginsChannelData(DBCacheImplInterface):
         channels = []
         for k, data in cls.get_data().items():
             key_info = cls.analysis_key(k)
-            if msg_type == key_info["msg_type"] and msg_type_id == key_info["msg_type_id"]:
-                channels.append((key_info["channel_id"], copy.deepcopy(data)))
+            if msg_type == key_info.msg_type and msg_type_id == key_info.msg_type_id:
+                channels.append((key_info.channel_id, copy.deepcopy(data)))
         return channels
 
     @classmethod
@@ -114,9 +134,9 @@ class DBPluginsChannelData(DBCacheImplInterface):
         cls.__push_dict = {}
         for k, data in cls.get_data().items():
             key_info = cls.analysis_key(k)
-            channel_id = key_info["channel_id"]
+            channel_id = key_info.channel_id
             if data["video_on"]:
-                cls.__add_to_push_list(key_info["msg_type"], key_info["msg_type_id"], channel_id, "video")
+                cls.__add_to_push_list(key_info.msg_type, key_info.msg_type_id, channel_id, "video")
 
     @classmethod
     def db_key_name(cls, bot_id):
@@ -133,15 +153,16 @@ class DBPluginsChannelData(DBCacheImplInterface):
         return f"{msg_type}_{msg_type_id}_{channel_id}"
 
     @classmethod
-    def analysis_key(cls, key):
+    def analysis_key(cls, key) -> Key:
         """ 解析generate_key生成的key """
         regex_groups = re.match("([a-zA-Z]*)_([0-9]*)_([a-zA-Z0-9_]*)", key).groups()
-        if regex_groups is not None:
-            return {
-                "msg_type": regex_groups[0],
-                "msg_type_id": int(regex_groups[1]),
-                "channel_id": regex_groups[2]
-            }
+        return Key(
+            msg_type=regex_groups[0],
+            msg_type_id=int(regex_groups[1]),
+            channel_id=regex_groups[2],
+        )
+
+
 
 
 DBManager.add_db(DBPluginsChannelData)
