@@ -2,7 +2,7 @@ from typing import Union
 from nonebot.rule import to_me
 from .database.channel_data import DBPluginsChannelData
 from protocol_adapter.protocol_adapter import ProtocolAdapter
-from protocol_adapter.adapter_type import AdapterGroupMessageEvent, AdapterPrivateMessageEvent, AdapterMessage
+from protocol_adapter.adapter_type import AdapterGroupMessageEvent, AdapterPrivateMessageEvent
 from nonebot import on_regex
 from utils.permission import white_list_handle
 

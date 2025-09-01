@@ -36,5 +36,3 @@ async def _(
             f"已删除Youtube频道 {channel_info['title'] if channel_info is not None else None}（{channel_id}）"
         )
     )
-
-

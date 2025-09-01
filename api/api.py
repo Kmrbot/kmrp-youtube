@@ -1,7 +1,7 @@
 from nonebot import logger
 from utils.KmrClientPy.KmrClient.client.web.request import request
 from utils.KmrClientPy.KmrClient.message_marshal.marshal import set_marshal, MarshalType
-from ..youtube_config import \
+from ..utils.youtube_config import \
     get_youtube_api_key, \
     get_youtube_monitor_server_addr_port, \
     get_youtube_monitor_server_get_channel_info_entry, \
