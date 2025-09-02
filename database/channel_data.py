@@ -82,7 +82,7 @@ class DBPluginsChannelData(DBCacheImplInterface):
     @classmethod
     def get_video_push_list(cls, channel_id):
         """ 获取channel_id对应推送视频的列表 """
-        return LoopManager.get_list(f"youtube_channel_{channel_id}")
+        return LoopManager.get_list(f"youtube_channel_video_{channel_id}")
 
     @classmethod
     def get_follow_channels(cls, msg_type, msg_type_id):
