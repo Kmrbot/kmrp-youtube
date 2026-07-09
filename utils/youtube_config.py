@@ -1,6 +1,6 @@
 import json
 from nonebot.log import logger
-from utils import get_config_path
+from utils.paths import get_config_path
 
 
 def get_youtube_config_data():
