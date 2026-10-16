@@ -1,15 +1,19 @@
 import json
 from nonebot.log import logger
-from utils.paths import get_config_path
+from utils.config import ensure_bot_data_config_dirs, get_plugin_config_path
 
 
 def get_youtube_config_data():
     try:
         # 每次都重新加载 即可以动态重载 性能消耗可忽略
-        with open(get_config_path().joinpath("youtube/config.json"), "r", encoding="utf8") as file:
+        ensure_bot_data_config_dirs()
+        with open(get_plugin_config_path("kmrp-youtube", "config.json"), "r", encoding="utf8") as file:
             data = json.load(file)
     except json.JSONDecodeError:
         logger.error("get_youtube_config_data json decode fail !")
+        return None
+    except FileNotFoundError:
+        logger.error("get_youtube_config_data fail ! File not found !")
         return None
     return data
 
